@@ -121,14 +121,14 @@ tr:hover { background: var(--bg3); }
 </div>
 
 <!-- ═════════════════════════════════ TABS ═════════════════════════════════ -->
-<div class="tabs" id="tabs">
-  <div class="tab active" data-panel="overview">Overview</div>
-  <div class="tab" data-panel="forest">Forest Plot</div>
-  <div class="tab" data-panel="funnel">Funnel Plot</div>
-  <div class="tab" data-panel="studies">Studies</div>
-  <div class="tab" data-panel="rob">Risk of Bias</div>
-  <div class="tab" data-panel="sequential">Sequential Analysis</div>
-  <div class="tab" data-panel="audit">Audit Log</div>
+<div class="tabs" id="tabs" role="tablist">
+  <button class="tab active" data-panel="overview" role="tab" aria-selected="true" tabindex="0">Overview</button>
+  <button class="tab" data-panel="forest" role="tab" aria-selected="false" tabindex="-1">Forest Plot</button>
+  <button class="tab" data-panel="funnel" role="tab" aria-selected="false" tabindex="-1">Funnel Plot</button>
+  <button class="tab" data-panel="studies" role="tab" aria-selected="false" tabindex="-1">Studies</button>
+  <button class="tab" data-panel="rob" role="tab" aria-selected="false" tabindex="-1">Risk of Bias</button>
+  <button class="tab" data-panel="sequential" role="tab" aria-selected="false" tabindex="-1">Sequential Analysis</button>
+  <button class="tab" data-panel="audit" role="tab" aria-selected="false" tabindex="-1">Audit Log</button>
 </div>
 
 <!-- ═════════════════════════════════ PANELS ═════════════════════════════════ -->
@@ -240,9 +240,9 @@ tr:hover { background: var(--bg3); }
 </div><!-- panel-container -->
 
 <!-- ═════════════════════════════════ ADD STUDY MODAL ═════════════════════════════════ -->
-<div id="addStudyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; display:none; align-items:center; justify-content:center;">
+<div id="addStudyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; align-items:center; justify-content:center;">
   <div class="card" style="max-width:600px; width:90%; max-height:80vh; overflow-y:auto;">
-    <h3 style="margin-bottom:16px;">Add New Study</h3>
+    <h3 id="modalTitle" style="margin-bottom:16px;">Add New Study</h3>
     <div class="form-grid" id="addStudyForm"></div>
     <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px;">
       <button class="btn" onclick="hideAddStudy()">Cancel</button>
@@ -279,11 +279,11 @@ const CONFIGS = {
     studyFields: ['name', 'year', 'nctId', 'n_pfa', 'e_pfa', 'n_thermal', 'e_thermal'],
     fieldLabels: { n_pfa: 'N (PFA)', e_pfa: 'Events (PFA)', n_thermal: 'N (Thermal)', e_thermal: 'Events (Thermal)' },
     studies: [
+      // MANIFEST-PF removed: single-arm registry (no comparator), not eligible for comparative MA
       { name: 'ADVENT', year: 2023, nctId: 'NCT04612244', n_pfa: 305, e_pfa: 225, n_thermal: 302, e_thermal: 216 },
-      { name: 'MANIFEST-PF', year: 2023, nctId: 'NCT04826029', n_pfa: 1568, e_pfa: 1223, n_thermal: 0, e_thermal: 0 },
-      { name: 'inspIRE', year: 2024, nctId: 'NCT05118828', n_pfa: 226, e_pfa: 181, n_thermal: 220, e_thermal: 167 },
-      { name: 'PULSE-EU', year: 2024, nctId: 'NCT05424588', n_pfa: 150, e_pfa: 119, n_thermal: 150, e_thermal: 112 },
-      { name: 'ECLIPSE-AF', year: 2025, nctId: 'NCT05765305', n_pfa: 300, e_pfa: 249, n_thermal: 300, e_thermal: 234 },
+      { name: 'inspIRE', year: 2024, nctId: 'NCT04524364', n_pfa: 226, e_pfa: 181, n_thermal: 220, e_thermal: 167 },
+      { name: 'PULSE-EU', year: 2024, nctId: 'NCT05823818', n_pfa: 150, e_pfa: 119, n_thermal: 150, e_thermal: 112 },
+      { name: 'ECLIPSE-AF', year: 2025, nctId: 'NCT04523545', n_pfa: 300, e_pfa: 249, n_thermal: 300, e_thermal: 234 },
     ],
   },
 
@@ -301,9 +301,9 @@ const CONFIGS = {
     studyFields: ['name', 'year', 'nctId', 'n_teer', 'e_teer', 'n_med', 'e_med'],
     fieldLabels: { n_teer: 'N (TEER)', e_teer: 'Events (TEER)', n_med: 'N (Medical)', e_med: 'Events (Medical)' },
     studies: [
-      { name: 'TRILUMINATE', year: 2023, nctId: 'NCT03904147', n_teer: 175, e_teer: 140, n_med: 175, e_med: 53 },
-      { name: 'CLASP TR', year: 2023, nctId: 'NCT04097145', n_teer: 87, e_teer: 70, n_med: 87, e_med: 20 },
-      { name: 'TRILUMINATE Pivotal', year: 2024, nctId: 'NCT04482842', n_teer: 350, e_teer: 280, n_med: 350, e_med: 88 },
+      // TRILUMINATE Pivotal (NCT03904147) is the definitive RCT (n=572 total, 1:1 randomized)
+      { name: 'TRILUMINATE Pivotal', year: 2023, nctId: 'NCT03904147', n_teer: 286, e_teer: 229, n_med: 286, e_med: 86 },
+      { name: 'CLASP II TR', year: 2023, nctId: 'NCT04097145', n_teer: 87, e_teer: 70, n_med: 87, e_med: 20 },
     ],
   },
 
@@ -341,7 +341,7 @@ function computeEffects(studies, config) {
     const a = s[e1f], b = s[n1f] - s[e1f];
     const c = s[e2f], d = s[n2f] - s[e2f];
 
-    if (s[n1f] === 0 || s[n2f] === 0 || (a === 0 && c === 0)) {
+    if (s[n1f] === 0 || s[n2f] === 0 || (a === 0 && c === 0) || (b === 0 && d === 0)) {
       return { ...s, yi: null, sei: null, wi: 0 };
     }
 
@@ -358,10 +358,10 @@ function computeEffects(studies, config) {
       yi = Math.log(a2/n1) - Math.log(c2/n2);
       sei = Math.sqrt(1/a2 - 1/n1 + 1/c2 - 1/n2);
     } else {
-      // RD
-      const n1 = a + b, n2 = c + d;
-      yi = a/n1 - c/n2;
-      sei = Math.sqrt((a*b)/(n1*n1*n1) + (c*d)/(n2*n2*n2));
+      // RD (with continuity correction)
+      const n1 = a2 + b2, n2 = c2 + d2;
+      yi = a2/n1 - c2/n2;
+      sei = Math.sqrt((a2*b2)/(n1*n1*n1) + (c2*d2)/(n2*n2*n2));
     }
 
     if (!isFinite(yi) || !isFinite(sei) || sei <= 0) {
@@ -405,7 +405,8 @@ function poolREML(studies, maxIter = 100, tol = 1e-8) {
     const sumW = wi.reduce((a,b) => a+b, 0);
     const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
 
-    const num = wi.reduce((a, w, i) => a + w*w * ((studies[i].yi - theta)**2 - studies[i].vi), 0);
+    // REML score: U = -0.5*sum(w) + 0.5*sum(w^2*(yi-theta)^2); Fisher info: I = 0.5*sum(w^2)
+    const num = wi.reduce((a, w, i) => a + w*w * (studies[i].yi - theta)**2, 0) - sumW;
     const den = wi.reduce((a, w) => a + w*w, 0);
     const delta = num / (den || 1);
     const newTau2 = Math.max(0, tau2 + delta);
@@ -418,7 +419,11 @@ function poolREML(studies, maxIter = 100, tol = 1e-8) {
   const sumW = wi.reduce((a,b) => a+b, 0);
   const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
   const se = 1 / Math.sqrt(sumW);
-  const Q = studies.reduce((a, s) => a + (1/s.vi) * (s.yi - theta)**2, 0);
+  // Q and I2 must use FE weights and FE theta (Cochran's Q definition)
+  const wiFE = studies.map(s => 1 / s.vi);
+  const sumWFE = wiFE.reduce((a,b) => a+b, 0);
+  const thetaFE = wiFE.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumWFE;
+  const Q = wiFE.reduce((a, w, i) => a + w * (studies[i].yi - thetaFE)**2, 0);
   const I2 = Q > k-1 ? (Q - (k-1)) / Q * 100 : 0;
 
   return { theta, se, tau2, I2, H2: Q / Math.max(1, k-1), Q, k, weights: wi.map(w => w/sumW*100) };
@@ -434,7 +439,9 @@ function poolPM(studies, maxIter = 100, tol = 1e-8) {
     const sumW = wi.reduce((a,b) => a+b, 0);
     const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
     const Qs = wi.reduce((a, w, i) => a + w * (studies[i].yi - theta)**2, 0);
-    const newTau2 = Math.max(0, tau2 + (Qs - (k - 1)) / sumW);
+    const sumW2 = wi.reduce((a, w) => a + w*w, 0);
+    const Cpm = sumW - sumW2 / sumW;
+    const newTau2 = Math.max(0, tau2 + (Qs - (k - 1)) / (Cpm || 1));
     if (Math.abs(newTau2 - tau2) < tol) { tau2 = newTau2; break; }
     tau2 = newTau2;
   }
@@ -443,13 +450,18 @@ function poolPM(studies, maxIter = 100, tol = 1e-8) {
   const sumW = wi.reduce((a,b) => a+b, 0);
   const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
   const se = 1 / Math.sqrt(sumW);
-  const Q = studies.reduce((a, s) => a + (1/s.vi) * (s.yi - theta)**2, 0);
+  // Q/I2 with FE theta
+  const wiFE = studies.map(s => 1 / s.vi);
+  const sumWFE = wiFE.reduce((a,b) => a+b, 0);
+  const thetaFE = wiFE.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumWFE;
+  const Q = wiFE.reduce((a, w, i) => a + w * (studies[i].yi - thetaFE)**2, 0);
 
   return { theta, se, tau2, I2: Q > k-1 ? (Q-(k-1))/Q*100 : 0, Q, k, weights: wi.map(w => w/sumW*100) };
 }
 
 function poolFE(studies) {
   const k = studies.length;
+  if (k === 0) return null;
   const wi = studies.map(s => 1 / s.vi);
   const sumW = wi.reduce((a,b) => a+b, 0);
   const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
@@ -559,6 +571,17 @@ function erf(x) {
 
 // ════════════════════════ RENDERING ════════════════════════
 
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(String(str ?? '')));
+  return d.innerHTML;
+}
+function csvSafe(val) {
+  const s = String(val ?? '');
+  if (/^[=+@\t\r]/.test(s)) return "'" + s;
+  if (/[,"\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
 function getCSSVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function plotlyLayout(extra) {
   return Object.assign({
@@ -605,7 +628,10 @@ function renderOverview() {
     findings.push(`Prediction interval: ${piStr}`);
   }
   const eg = eggerTest(data);
-  if (eg) findings.push(`Egger's test for publication bias: intercept = ${eg.intercept.toFixed(2)}, p = ${eg.p.toFixed(3)}`);
+  if (eg) {
+    const egWarn = data.length < 10 ? ' (caution: k<10, test has low power)' : '';
+    findings.push(`Egger's test for publication bias: intercept = ${eg.intercept.toFixed(2)}, p = ${eg.p.toFixed(3)}${egWarn}`);
+  }
   findings.push(`Last updated: ${new Date().toLocaleDateString()}`);
   document.getElementById('keyFindings').innerHTML = findings.map(f => `<p>${f}</p>`).join('');
 }
@@ -697,11 +723,13 @@ function renderStudiesTable() {
   document.getElementById('studiesHeader').innerHTML = hdr + '<th>Effect</th><th>95% CI</th>';
 
   const data = computeEffects(STUDIES, CONFIG);
+  const alpha = 1 - confLevel;
+  const zCritTable = -jStat_tInv(alpha/2, 1e6);
   document.getElementById('studiesBody').innerHTML = data.map(s => {
     const eff = CONFIG.scaleType === 'ratio' ? Math.exp(s.yi).toFixed(2) : s.yi.toFixed(2);
-    const lo = CONFIG.scaleType === 'ratio' ? Math.exp(s.yi - 1.96 * s.sei).toFixed(2) : (s.yi - 1.96 * s.sei).toFixed(2);
-    const hi = CONFIG.scaleType === 'ratio' ? Math.exp(s.yi + 1.96 * s.sei).toFixed(2) : (s.yi + 1.96 * s.sei).toFixed(2);
-    const cells = fields.map(f => `<td>${s[f] ?? ''}</td>`).join('');
+    const lo = CONFIG.scaleType === 'ratio' ? Math.exp(s.yi - zCritTable * s.sei).toFixed(2) : (s.yi - zCritTable * s.sei).toFixed(2);
+    const hi = CONFIG.scaleType === 'ratio' ? Math.exp(s.yi + zCritTable * s.sei).toFixed(2) : (s.yi + zCritTable * s.sei).toFixed(2);
+    const cells = fields.map(f => `<td>${escapeHtml(s[f])}</td>`).join('');
     return `<tr>${cells}<td>${eff}</td><td>[${lo}, ${hi}]</td></tr>`;
   }).join('');
 }
@@ -715,7 +743,7 @@ function renderRoB() {
       const level = (s.rob && s.rob[d]) || 'low';
       return `<td><span class="rob-dot rob-${level}" title="${level}"></span></td>`;
     }).join('');
-    return `<tr><td>${s.name} (${s.year})</td>${cells}</tr>`;
+    return `<tr><td>${escapeHtml(s.name)} (${s.year})</td>${cells}</tr>`;
   }).join('');
 
   // Summary chart
@@ -748,12 +776,16 @@ function renderSequential() {
     }
   }
 
-  const obrienFleming = 1.96 * Math.sqrt(data.length); // Simplified boundary
+  // O'Brien-Fleming boundary: decreases per look as z_alpha * sqrt(K/j)
+  const K = data.length;
+  const obfUpper = cumLabels.map((_, j) => 1.96 * Math.sqrt(K / (j + 1)));
+  const obfLower = obfUpper.map(b => -b);
+  const finalBoundary = obfUpper[obfUpper.length - 1];
 
   Plotly.newPlot('tsaPlot', [
     { x: cumLabels, y: cumZ, mode: 'lines+markers', name: 'Cumulative Z', line: { color: getCSSVar('--accent') }, marker: { size: 6 } },
-    { x: [cumLabels[0], cumLabels[cumLabels.length-1]], y: [obrienFleming, obrienFleming], mode: 'lines', name: "O'Brien-Fleming", line: { color: getCSSVar('--red'), dash: 'dash' } },
-    { x: [cumLabels[0], cumLabels[cumLabels.length-1]], y: [-obrienFleming, -obrienFleming], mode: 'lines', showlegend: false, line: { color: getCSSVar('--red'), dash: 'dash' } },
+    { x: cumLabels, y: obfUpper, mode: 'lines', name: "O'Brien-Fleming", line: { color: getCSSVar('--red'), dash: 'dash' } },
+    { x: cumLabels, y: obfLower, mode: 'lines', showlegend: false, line: { color: getCSSVar('--red'), dash: 'dash' } },
   ], plotlyLayout({
     xaxis: { tickangle: -45 }, yaxis: { title: 'Cumulative Z-score', gridcolor: getCSSVar('--border') },
     legend: { x: 0, y: 1.1, orientation: 'h' },
@@ -773,10 +805,10 @@ function renderSequential() {
     shapes: [{ type: 'line', x0: 0, x1: data.length - 1, y0: 0, y1: 0, line: { color: getCSSVar('--border'), dash: 'dot' } }],
   }), { responsive: true });
 
-  const crossed = Math.abs(cumZ[cumZ.length-1]) > obrienFleming;
+  const crossed = Math.abs(cumZ[cumZ.length-1]) > finalBoundary;
   document.getElementById('seqSummary').innerHTML = `
     <p>Current cumulative Z-score: <strong>${cumZ[cumZ.length-1].toFixed(2)}</strong></p>
-    <p>O'Brien-Fleming boundary: &plusmn;${obrienFleming.toFixed(2)}</p>
+    <p>O'Brien-Fleming boundary at final look: &plusmn;${finalBoundary.toFixed(2)}</p>
     <p>Boundary crossed: <strong style="color:${crossed ? 'var(--green)' : 'var(--orange)'}">${crossed ? 'Yes — evidence conclusive' : 'No — continue monitoring'}</strong></p>
   `;
 }
@@ -800,23 +832,43 @@ function loadConfig(id) {
 }
 
 function renderAll() {
+  const active = document.querySelector('.tab.active');
+  const panel = active ? active.dataset.panel : 'overview';
+  // Always render overview; only render active panel to avoid wasteful hidden renders
   renderOverview();
-  renderForest();
-  renderFunnel();
-  renderStudiesTable();
-  renderRoB();
-  renderSequential();
-  renderAudit();
+  if (panel === 'forest') renderForest();
+  else if (panel === 'funnel') renderFunnel();
+  else if (panel === 'studies') renderStudiesTable();
+  else if (panel === 'rob') renderRoB();
+  else if (panel === 'sequential') renderSequential();
+  else if (panel === 'audit') renderAudit();
 }
 
-// Tab navigation
+// Tab navigation (keyboard accessible)
+function activateTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  tab.setAttribute('aria-selected', 'true');
+  tab.tabIndex = 0;
+  tab.focus();
+  document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  renderAll();
+}
 document.getElementById('tabs').addEventListener('click', function(e) {
   if (!e.target.classList.contains('tab')) return;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  e.target.classList.add('active');
-  document.getElementById('panel-' + e.target.dataset.panel).classList.add('active');
-  renderAll();
+  activateTab(e.target);
+});
+document.getElementById('tabs').addEventListener('keydown', function(e) {
+  const tabs = [...document.querySelectorAll('.tab')];
+  const idx = tabs.indexOf(document.activeElement);
+  if (idx === -1) return;
+  let next = -1;
+  if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;
+  else if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;
+  else if (e.key === 'Home') next = 0;
+  else if (e.key === 'End') next = tabs.length - 1;
+  if (next >= 0) { e.preventDefault(); activateTab(tabs[next]); }
 });
 
 // Confidence level
@@ -839,18 +891,29 @@ function toggleTheme() {
   renderAll();
 }
 
-// Add study modal
+// Add study modal (accessible: focus trap + Escape)
+let _modalEscHandler = null;
 function showAddStudy() {
   const form = document.getElementById('addStudyForm');
   form.innerHTML = CONFIG.studyFields.map(f => `
     <div class="form-group">
-      <label>${CONFIG.fieldLabels[f] || f}</label>
+      <label for="new-${f}">${escapeHtml(CONFIG.fieldLabels[f] || f)}</label>
       <input id="new-${f}" type="${f === 'name' || f === 'nctId' ? 'text' : 'number'}" />
     </div>
   `).join('');
   document.getElementById('addStudyModal').style.display = 'flex';
+  // Focus first input
+  const firstInput = form.querySelector('input');
+  if (firstInput) setTimeout(() => firstInput.focus(), 50);
+  // Escape to close
+  _modalEscHandler = function(e) { if (e.key === 'Escape') hideAddStudy(); };
+  document.addEventListener('keydown', _modalEscHandler);
 }
-function hideAddStudy() { document.getElementById('addStudyModal').style.display = 'none'; }
+function hideAddStudy() {
+  document.getElementById('addStudyModal').style.display = 'none';
+  if (_modalEscHandler) { document.removeEventListener('keydown', _modalEscHandler); _modalEscHandler = null; }
+  document.getElementById('btnAddStudy').focus();
+}
 function addStudy() {
   const study = {};
   CONFIG.studyFields.forEach(f => {
@@ -859,7 +922,7 @@ function addStudy() {
   });
   STUDIES.push(study);
   hideAddStudy();
-  addAudit(`Added study: ${study.name || 'Unnamed'}`);
+  addAudit(`Added study: ${escapeHtml(study.name || 'Unnamed')}`);
   renderAll();
 }
 
@@ -871,7 +934,7 @@ function exportCSV() {
   const data = computeEffects(STUDIES, CONFIG);
   const fields = [...CONFIG.studyFields, 'yi', 'sei'];
   let csv = fields.join(',') + '\n';
-  data.forEach(s => { csv += fields.map(f => s[f] ?? '').join(',') + '\n'; });
+  data.forEach(s => { csv += fields.map(f => csvSafe(s[f])).join(',') + '\n'; });
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = `living-meta-${CONFIG.id}.csv`;
