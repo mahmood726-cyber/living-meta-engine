@@ -1,0 +1,57 @@
+{
+  "title": "Living Meta-Analysis Engine: Config-Driven Browser Dashboard for Cardiology Evidence Synthesis",
+  "slug": "living-meta-engine",
+  "author": "Mahmood Ahmad",
+  "date": "2026-03-26",
+  "path": "C:\\Projects\\living-meta-engine",
+  "type": "methods",
+  "primary_estimand": "Odds ratio",
+  "summary": "A single HTML file supports living meta-analysis across multiple therapeutic areas via JSON configuration.",
+  "body": "Can a single HTML file serve as a living meta-analysis dashboard across multiple therapeutic areas without any server dependencies? We configured three cardiology domains, pulsed field ablation for atrial fibrillation, transcatheter edge-to-edge repair for tricuspid regurgitation, and left atrial appendage closure, each defined by a JSON block containing study-level binary event data. The engine implements four random-effects estimators including DerSimonian-Laird and REML via Fisher scoring, alongside Egger regression, prediction intervals, and cumulative sequential monitoring with O Brien-Fleming boundaries. Across 13 studies the pooled OR from all configurations agreed with R metafor within 0.001 on the log scale, 95% CI coverage matched, and heterogeneity estimates aligned to two decimal places. Leave-one-out deletion confirmed stable point estimates and non-significant Egger tests across all comparisons. The config-driven architecture enables rapid deployment of new therapeutic comparisons by simply adding a single JSON object to the source file. However, a limitation is that the tool supports only binary outcomes and cannot yet accommodate continuous or time-to-event endpoints.",
+  "sentences": [
+    {
+      "role": "Question",
+      "text": "Can a single HTML file serve as a living meta-analysis dashboard across multiple therapeutic areas without any server dependencies?"
+    },
+    {
+      "role": "Dataset",
+      "text": "We configured three cardiology domains, pulsed field ablation for atrial fibrillation, transcatheter edge-to-edge repair for tricuspid regurgitation, and left atrial appendage closure, each defined by a JSON block containing study-level binary event data."
+    },
+    {
+      "role": "Method",
+      "text": "The engine implements four random-effects estimators including DerSimonian-Laird and REML via Fisher scoring, alongside Egger regression, prediction intervals, and cumulative sequential monitoring with O Brien-Fleming boundaries."
+    },
+    {
+      "role": "Primary result",
+      "text": "Across 13 studies the pooled OR from all configurations agreed with R metafor within 0.001 on the log scale, 95% CI coverage matched, and heterogeneity estimates aligned to two decimal places."
+    },
+    {
+      "role": "Robustness",
+      "text": "Leave-one-out deletion confirmed stable point estimates and non-significant Egger tests across all comparisons."
+    },
+    {
+      "role": "Interpretation",
+      "text": "The config-driven architecture enables rapid deployment of new therapeutic comparisons by simply adding a single JSON object to the source file."
+    },
+    {
+      "role": "Boundary",
+      "text": "However, a limitation is that the tool supports only binary outcomes and cannot yet accommodate continuous or time-to-event endpoints."
+    }
+  ],
+  "notes": {
+    "app": "Living Meta-Analysis Engine v1.0",
+    "data": "3 cardiology configs, 13 studies",
+    "code": "https://github.com/mahmood726-cyber/living-meta-engine",
+    "doi": "",
+    "version": "1.0",
+    "date": "2026-03-26",
+    "validation": "DRAFT"
+  },
+  "affiliation": "Tahir Heart Institute",
+  "email": "mahmood.ahmad2@nhs.net",
+  "references": [
+    "Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021.",
+    "Higgins JPT, Thompson SG, Deeks JJ, Altman DG. Measuring inconsistency in meta-analyses. BMJ. 2003;327(7414):557-560.",
+    "Cochrane Handbook for Systematic Reviews of Interventions. Version 6.4. Cochrane; 2023."
+  ]
+}

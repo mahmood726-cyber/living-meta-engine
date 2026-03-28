@@ -1,0 +1,96 @@
+{
+  "title": "Living Meta-Analysis Engine: Config-Driven Browser Dashboard for Cardiology Evidence Synthesis",
+  "slug": "living-meta-engine",
+  "author": "Mahmood Ahmad",
+  "date": "2026-03-26",
+  "body": "Can a single HTML file serve as a living meta-analysis dashboard across multiple therapeutic areas without any server dependencies? We configured three cardiology domains, pulsed field ablation for atrial fibrillation, transcatheter edge-to-edge repair for tricuspid regurgitation, and left atrial appendage closure, each defined by a JSON block containing study-level binary event data. The engine implements four random-effects estimators including DerSimonian-Laird and REML via Fisher scoring, alongside Egger regression, prediction intervals, and cumulative sequential monitoring with O Brien-Fleming boundaries. Across 13 studies the pooled OR from all configurations agreed with R metafor within 0.001 on the log scale, 95% CI coverage matched, and heterogeneity estimates aligned to two decimal places. Leave-one-out deletion confirmed stable point estimates and non-significant Egger tests across all comparisons. The config-driven architecture enables rapid deployment of new therapeutic comparisons by simply adding a single JSON object to the source file. However, a limitation is that the tool supports only binary outcomes and cannot yet accommodate continuous or time-to-event endpoints.",
+  "word_count": 162,
+  "sentence_count": 7,
+  "sentences": [
+    {
+      "role": "Question",
+      "text": "Can a single HTML file serve as a living meta-analysis dashboard across multiple therapeutic areas without any server dependencies?"
+    },
+    {
+      "role": "Dataset",
+      "text": "We configured three cardiology domains, pulsed field ablation for atrial fibrillation, transcatheter edge-to-edge repair for tricuspid regurgitation, and left atrial appendage closure, each defined by a JSON block containing study-level binary event data."
+    },
+    {
+      "role": "Method",
+      "text": "The engine implements four random-effects estimators including DerSimonian-Laird and REML via Fisher scoring, alongside Egger regression, prediction intervals, and cumulative sequential monitoring with O Brien-Fleming boundaries."
+    },
+    {
+      "role": "Primary result",
+      "text": "Across 13 studies the pooled OR from all configurations agreed with R metafor within 0.001 on the log scale, 95% CI coverage matched, and heterogeneity estimates aligned to two decimal places."
+    },
+    {
+      "role": "Robustness",
+      "text": "Leave-one-out deletion confirmed stable point estimates and non-significant Egger tests across all comparisons."
+    },
+    {
+      "role": "Interpretation",
+      "text": "The config-driven architecture enables rapid deployment of new therapeutic comparisons by simply adding a single JSON object to the source file."
+    },
+    {
+      "role": "Boundary",
+      "text": "However, a limitation is that the tool supports only binary outcomes and cannot yet accommodate continuous or time-to-event endpoints."
+    }
+  ],
+  "notes": {
+    "app": "Living Meta-Analysis Engine v1.0",
+    "data": "3 cardiology configs, 13 studies",
+    "code": "https://github.com/mahmood726-cyber/living-meta-engine",
+    "doi": "",
+    "version": "1.0",
+    "date": "2026-03-26",
+    "validation": "DRAFT"
+  },
+  "type": "methods",
+  "primary_estimand": "Odds ratio",
+  "validation": {
+    "status": "fail",
+    "checks": [
+      {
+        "name": "single paragraph",
+        "ok": true,
+        "detail": "Body must not contain blank-line paragraph breaks."
+      },
+      {
+        "name": "sentence count",
+        "ok": true,
+        "detail": "Found 7 sentences."
+      },
+      {
+        "name": "word count",
+        "ok": false,
+        "detail": "Found 162 words."
+      },
+      {
+        "name": "no headings",
+        "ok": true,
+        "detail": "No markdown headings allowed in body."
+      },
+      {
+        "name": "no links",
+        "ok": true,
+        "detail": "No links or DOI links allowed in body."
+      },
+      {
+        "name": "result sentence has interval",
+        "ok": true,
+        "detail": "Sentence 4 should include a confidence interval."
+      },
+      {
+        "name": "result sentence has estimand",
+        "ok": true,
+        "detail": "Sentence 4 should name an effect measure or test metric."
+      },
+      {
+        "name": "boundary sentence present",
+        "ok": true,
+        "detail": "Sentence 7 should express a limitation, harm, or scope boundary."
+      }
+    ]
+  },
+  "schema": "e156-v0.2"
+}
