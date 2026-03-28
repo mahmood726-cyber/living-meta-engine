@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Living Meta-Analysis Engine</title>
+<link rel="icon" href="data:,">
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <style>
 /* ─── CSS Variables (dark/light) ─── */
@@ -128,6 +129,7 @@ tr:hover { background: var(--bg3); }
   <button class="tab" data-panel="studies" role="tab" aria-selected="false" tabindex="-1">Studies</button>
   <button class="tab" data-panel="rob" role="tab" aria-selected="false" tabindex="-1">Risk of Bias</button>
   <button class="tab" data-panel="sequential" role="tab" aria-selected="false" tabindex="-1">Sequential Analysis</button>
+  <button class="tab" data-panel="transparency" role="tab" aria-selected="false" tabindex="-1">Transparency</button>
   <button class="tab" data-panel="audit" role="tab" aria-selected="false" tabindex="-1">Audit Log</button>
 </div>
 
@@ -237,6 +239,22 @@ tr:hover { background: var(--bg3); }
   </div>
 </div>
 
+<!-- TRANSPARENCY -->
+<div class="panel" id="panel-transparency">
+  <div class="card">
+    <h3>Reviewer Transparency</h3>
+    <div id="transparencySummary" style="font-size:0.9rem; line-height:1.8;"></div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>Record Ledger</h3>
+    <div id="transparencyLedger"></div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>Published Meta Benchmarks</h3>
+    <div id="transparencyBenchmarks" style="font-size:0.9rem; line-height:1.8;"></div>
+  </div>
+</div>
+
 </div><!-- panel-container -->
 
 <!-- ═════════════════════════════════ ADD STUDY MODAL ═════════════════════════════════ -->
@@ -331,6 +349,21 @@ const CONFIGS = {
 };
 
 // ════════════════════════ STATISTICAL ENGINE ════════════════════════
+
+const BENCHMARK_LINKS = {
+  'pfa-af': [
+    { label: 'Published PFA meta-analysis (PMID 41759868)', url: 'https://pubmed.ncbi.nlm.nih.gov/41759868/' },
+    { label: 'Published PFA meta-analysis (PMID 41578543)', url: 'https://pubmed.ncbi.nlm.nih.gov/41578543/' }
+  ],
+  'tricuspid-teer': [
+    { label: 'Published TEER meta-analysis (PMID 40810290)', url: 'https://pubmed.ncbi.nlm.nih.gov/40810290/' },
+    { label: 'Published TEER meta-analysis (PMID 37473817)', url: 'https://pubmed.ncbi.nlm.nih.gov/37473817/' }
+  ],
+  'laao': [
+    { label: 'Published LAAO meta-analysis (PMID 41397490)', url: 'https://pubmed.ncbi.nlm.nih.gov/41397490/' },
+    { label: 'Published LAAO meta-analysis (PMID 38948665)', url: 'https://pubmed.ncbi.nlm.nih.gov/38948665/' }
+  ]
+};
 
 function computeEffects(studies, config) {
   /** Compute log-scale effect sizes from raw 2x2 data. */
@@ -819,6 +852,55 @@ function renderAudit() {
   ).join('');
 }
 
+function renderTransparency() {
+  if (!CONFIG) return;
+  const fields = CONFIG.studyFields;
+  const n1f = fields[3], e1f = fields[4], n2f = fields[5], e2f = fields[6];
+  const benchmarkLinks = BENCHMARK_LINKS[CONFIG.id] || [];
+  const searchUrl = 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(`${CONFIG.name} meta-analysis systematic review`);
+  const rows = STUDIES.map(study => {
+    const rob = Array.isArray(study.rob) ? study.rob.join(', ') : 'not assessed';
+    return `<tr>
+      <td>${escapeHtml(study.name || 'Unnamed')}</td>
+      <td>${escapeHtml(String(study.year || '--'))}</td>
+      <td>${escapeHtml(study.nctId || '--')}</td>
+      <td>${escapeHtml(String(study[n1f] ?? '--'))} / ${escapeHtml(String(study[n2f] ?? '--'))}</td>
+      <td>${escapeHtml(String(study[e1f] ?? '--'))} / ${escapeHtml(String(study[e2f] ?? '--'))}</td>
+      <td>${escapeHtml(rob)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('transparencySummary').innerHTML = `
+    <p><strong>Scope:</strong> this is a generic modeling engine. It now exposes the current study ledger and benchmark links, but the full search history and source-excerpt workflow still lives in the disease-specific living-meta pages.</p>
+    <p><strong>Template query seed:</strong> ${escapeHtml(CONFIG.description)} with randomized/comparative terms targeting ${escapeHtml(CONFIG.primaryOutcome)}.</p>
+    <p><strong>Eligibility model:</strong> studies with extractable raw counts for the configured effect measure enter the pooled estimate; single-arm or indirect evidence should be shown separately rather than silently pooled.</p>
+    <p><strong>Current dataset:</strong> ${STUDIES.length} studies, effect measure ${escapeHtml(CONFIG.effectLabel)}, outcome ${escapeHtml(CONFIG.primaryOutcome)}.</p>
+  `;
+
+  document.getElementById('transparencyLedger').innerHTML = `
+    <div class="table-wrap">
+      <table id="transparencyTable">
+        <thead>
+          <tr>
+            <th>Study</th>
+            <th>Year</th>
+            <th>NCT</th>
+            <th>Totals</th>
+            <th>Events</th>
+            <th>RoB</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('transparencyBenchmarks').innerHTML = `
+    ${benchmarkLinks.map(link => `<p><a href="${link.url}" target="_blank" rel="noopener">${escapeHtml(link.label)}</a></p>`).join('')}
+    <p><a href="${searchUrl}" target="_blank" rel="noopener">PubMed search for published meta-analyses on ${escapeHtml(CONFIG.name)}</a></p>
+  `;
+}
+
 // ════════════════════════ UI LOGIC ════════════════════════
 
 function loadConfig(id) {
@@ -841,6 +923,7 @@ function renderAll() {
   else if (panel === 'studies') renderStudiesTable();
   else if (panel === 'rob') renderRoB();
   else if (panel === 'sequential') renderSequential();
+  else if (panel === 'transparency') renderTransparency();
   else if (panel === 'audit') renderAudit();
 }
 
