@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it as below."
+type: software
+title: "Living Meta Engine"
+license: MIT
+abstract: >-
+  Browser-based living meta-analysis engine with protocol registration and
+  repository-level smoke validation.
+keywords:
+  - living meta-analysis
+  - evidence synthesis
+  - browser application
+  - protocol registration
+authors:
+  - family-names: Ahmad
+    given-names: Mahmood
+preferred-citation:
+  type: software
+  title: "Living Meta Engine"
+  authors:
+    - family-names: Ahmad
+      given-names: Mahmood
+  year: 2026
