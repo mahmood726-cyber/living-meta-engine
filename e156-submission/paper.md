@@ -1,6 +1,6 @@
 Mahmood Ahmad
 Tahir Heart Institute
-author@example.com
+mahmood.ahmad2@nhs.net
 
 Living Meta-Analysis Engine: Config-Driven Browser Dashboard for Cardiology Evidence Synthesis
 
