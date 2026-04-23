@@ -1,0 +1,23 @@
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+dist/
+coverage/
+*.log
+*.pyc
+.Rhistory
+.RData
+Thumbs.db
+.DS_Store
+.local_server.pid
+release/
+
+# Sentinel pre-push hook output (auto-generated per session)
+STUCK_FAILURES.md
+STUCK_FAILURES.jsonl
+sentinel-findings.md
+sentinel-findings.jsonl
+review-findings.md
+review-findings.jsonl
