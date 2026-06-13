@@ -516,7 +516,8 @@ function pool(studies, method = 'DL') {
 function predictionInterval(result, confLevel = 0.95) {
   if (!result || result.k < 3) return null;
   const alpha = 1 - confLevel;
-  const tCrit = jStat_tInv(1 - alpha/2, result.k - 2);
+  // Cochrane v6.5 / RevMan-2025 convention: t_{k-1} (not IntHout 2016 t_{k-2}).
+  const tCrit = jStat_tInv(1 - alpha/2, result.k - 1);
   const piSE = Math.sqrt(result.tau2 + result.se ** 2);
   return { lo: result.theta - tCrit * piSE, hi: result.theta + tCrit * piSE };
 }
