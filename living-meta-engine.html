@@ -438,9 +438,12 @@ function poolREML(studies, maxIter = 100, tol = 1e-8) {
     const sumW = wi.reduce((a,b) => a+b, 0);
     const theta = wi.reduce((a, w, i) => a + w * studies[i].yi, 0) / sumW;
 
-    // REML score: U = -0.5*sum(w) + 0.5*sum(w^2*(yi-theta)^2); Fisher info: I = 0.5*sum(w^2)
-    const num = wi.reduce((a, w, i) => a + w*w * (studies[i].yi - theta)**2, 0) - sumW;
-    const den = wi.reduce((a, w) => a + w*w, 0);
+    // REML score root: sum(w^2*(yi-theta)^2) = sum(w) - sum(w^2)/sum(w).
+    // (ML omits the +sum(w^2)/sum(w) trace-correction term; that term is the
+    //  -0.5*log|X'V^-1 X| REML penalty and is what distinguishes REML from ML.)
+    const sumW2 = wi.reduce((a, w) => a + w*w, 0);
+    const num = wi.reduce((a, w, i) => a + w*w * (studies[i].yi - theta)**2, 0) - sumW + sumW2 / sumW;
+    const den = sumW2;
     const delta = num / (den || 1);
     const newTau2 = Math.max(0, tau2 + delta);
 
@@ -531,6 +534,9 @@ function eggerTest(studies) {
   const ym = y.reduce((a,b) => a+b, 0) / n;
   const ssxx = x.reduce((a,v) => a + (v-xm)**2, 0);
   const ssxy = x.reduce((a,v,i) => a + (v-xm)*(y[i]-ym), 0);
+  // Degenerate design: all precisions (1/sei) identical => ssxx=0 => slope/intercept undefined.
+  // Return null so the UI shows the insufficient-data message instead of rendering 'NaN'.
+  if (ssxx === 0 || !isFinite(ssxx)) return null;
   const b = ssxy / ssxx;
   const a0 = ym - b * xm;
   const residuals = y.map((v,i) => v - a0 - b * x[i]);

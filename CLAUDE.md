@@ -30,13 +30,13 @@ Add a new entry to the `CONFIGS` object in the `<script>` block:
 ```
 
 ## Current Configs
-1. **PFA-AF**: Pulsed Field Ablation vs Thermal for Atrial Fibrillation (5 studies)
-2. **Tricuspid TEER**: TEER vs Medical Therapy for Tricuspid Regurgitation (3 studies)
+1. **PFA-AF**: Pulsed Field Ablation vs Thermal for Atrial Fibrillation (4 studies)
+2. **Tricuspid TEER**: TEER vs Medical Therapy for Tricuspid Regurgitation (2 studies)
 3. **LAAO**: Left Atrial Appendage Closure vs OAC for Stroke Prevention (5 studies)
 
 ## Statistical Engine
 - 4 estimators: FE, DL, REML (Fisher scoring), PM (iterative)
-- Prediction interval: t_{k-2} df (Riley et al. 2011)
+- Prediction interval: t_{k-1} df (Cochrane v6.5)
 - Publication bias: Egger's test (WLS regression)
 - Sequential: Cumulative Z-score with O'Brien-Fleming boundary, CUSUM chart
 - Self-contained t-distribution (incomplete beta, no external math library)

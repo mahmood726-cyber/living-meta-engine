@@ -60,6 +60,21 @@ const assertions = `
       var z=computeEffects([{name:'Z',year:2020,nctId:'x',n_pfa:100,e_pfa:0,n_thermal:100,e_thermal:5}],cfg);
       return z.length===1 && isFinite(z[0].yi);
   })());
+
+  // ── Fixed heterogeneous 5-study OR dataset (raw a/n_t vs c/n_c) for estimator pinning ──
+  // Reference tau^2 values independently reproduced via DerSimonian-Kacker fixed-point iteration.
+  var HET = [[60,100,40,100],[50,100,48,100],[80,100,30,100],[45,100,55,100],[70,100,35,100]]
+    .map(function(r){var a=r[0],nt=r[1],c=r[2],nc=r[3];var b=nt-a,d=nc-c;
+      var vi=1/a+1/b+1/c+1/d; return {yi:Math.log((a*d)/(b*c)), vi:vi, sei:Math.sqrt(vi)};});
+  // REML must include the +sum(w^2)/sum(w) trace-correction (else it collapses to the ML value 0.791090).
+  ok('poolREML tau2 == REML reference 1.013773 (not ML 0.791090)', Math.abs(poolREML(HET).tau2 - 1.013773) < 1e-4);
+  ok('poolPM tau2 == PM reference 1.019019', Math.abs(poolPM(HET).tau2 - 1.019019) < 1e-4);
+  ok('poolREML tau2 > ML fixed-point 0.791090', poolREML(HET).tau2 > 0.85);
+  // Degenerate Egger: all studies share identical SE -> ssxx=0 -> must return null, not a NaN object.
+  ok('eggerTest all-equal-SE returns null', eggerTest([{yi:0.5,vi:0.25,sei:0.5},{yi:0.2,vi:0.25,sei:0.5},{yi:0.8,vi:0.25,sei:0.5}])===null);
+  // Empty-input pooling returns null (no throw / no NaN object).
+  ok('pool([]) returns null', pool([])===null);
+
   console.log('\\n'+pass+' passed, '+fail+' failed');
   if (fail) process.exit(1);
 })();
